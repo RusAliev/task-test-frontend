@@ -1,0 +1,37 @@
+.block {
+  border: 2px solid #333;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+}
+
+.block h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.empty-message {
+  color: #999;
+  font-style: italic;
+  padding: 20px;
+  text-align: center;
+  width: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+  .block {
+    background-color: #1a1a1a;
+    border-color: #555;
+  }
+
+  .block h3 {
+    color: #fff;
+  }
+
+  .empty-message {
+    color: #888;
+  }
+}
