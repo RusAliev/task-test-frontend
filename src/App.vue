@@ -1,76 +1,68 @@
 <template>
   <div id="app">
-    <header>
-      <h1>Vue 3 Application</h1>
-    </header>
-    <main>
-      <div class="card">
-        <h2>Welcome to Vue 3</h2>
-        <p>This is a Vue 3 project created with Vite.</p>
-        <button @click="count++">Count is: {{ count }}</button>
+    <div class="container">
+      <div class="top-section">
+        <SelectedUserItems :items="selectedUserItems" />
+        <SelectedChoiceItem :item="selectedChoiceItem" />
       </div>
-    </main>
+
+      <div class="bottom-section">
+        <UserItemsList 
+          :items="userItems"
+          :selected-ids="selectedUserItemIds"
+          @item-click="toggleUserItem"
+        />
+        <ChoiceItemsList 
+          :items="choiceItems"
+          :selected-id="selectedChoiceItem?.id"
+          @item-click="selectChoiceItem"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue'
+import SelectedUserItems from './components/SelectedUserItems.vue'
+import SelectedChoiceItem from './components/SelectedChoiceItem.vue'
+import UserItemsList from './components/UserItemsList.vue'
+import ChoiceItemsList from './components/ChoiceItemsList.vue'
+import { USER_ITEMS, CHOICE_ITEMS } from './constants/items.js'
+import { useItemSelection } from './composables/useItemSelection.js'
+import { useSingleItemSelection } from './composables/useSingleItemSelection.js'
 
-export default {
-  name: 'App',
-  setup() {
-    const count = ref(0)
-    return {
-      count
-    }
-  }
-}
+const userItems = ref(USER_ITEMS)
+
+const choiceItems = ref(CHOICE_ITEMS)
+
+const {
+  selectedItems: selectedUserItems,
+  selectedItemIds: selectedUserItemIds,
+  toggleItem: toggleUserItem
+} = useItemSelection()
+
+const {
+  selectedItem: selectedChoiceItem,
+  selectItem: selectChoiceItem
+} = useSingleItemSelection()
 </script>
 
 <style scoped>
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px;
 }
 
-header {
-  margin-bottom: 2rem;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-  color: #42b983;
-}
-
-.card {
-  padding: 2em;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #42b983;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.25s;
-}
-
-button:hover {
-  background-color: #35a372;
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.top-section,
+.bottom-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  flex: 1;
 }
 </style>
